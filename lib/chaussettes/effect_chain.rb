@@ -1,6 +1,7 @@
 require 'chaussettes/effect/fade'
 require 'chaussettes/effect/gain'
 require 'chaussettes/effect/synth'
+require 'chaussettes/effect/vol'
 
 module Chaussettes
 
@@ -53,6 +54,12 @@ module Chaussettes
 
       @commands << 'trim'
       @commands.concat(positions)
+      self
+    end
+
+    def vol(gain, type: nil, limitergain: nil)
+      effect = Effect::Vol.new(gain, type: type, limitergain: limitergain)
+      @commands.concat(effect.commands)
       self
     end
   end

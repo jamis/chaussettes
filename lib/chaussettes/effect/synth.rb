@@ -41,12 +41,16 @@ module Chaussettes
         _append_opts @start_opts
       end
 
-      def _append_opts(opts)
-        return unless opts
+      OPT_NAMES = %i(bias shift p1 p2 p3).freeze
+      DEFAULTS = { bias: 0, shift: 0 }.freeze
 
-        %i(bias shift p1 p2 p3).each do |opt|
-          break unless opts[opt]
-          @commands << opts[opt]
+      def _append_opts(opts)
+        return unless opts && opts.any?
+
+        OPT_NAMES.each do |opt|
+          value = opts[opt] || DEFAULTS[opt]
+          break unless value
+          @commands << value
         end
       end
 
