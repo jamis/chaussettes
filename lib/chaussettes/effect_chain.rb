@@ -1,5 +1,6 @@
 require 'chaussettes/effect/fade'
 require 'chaussettes/effect/gain'
+require 'chaussettes/effect/synth'
 
 module Chaussettes
 
@@ -36,6 +37,12 @@ module Chaussettes
 
     def restart
       @commands << 'restart'
+      self
+    end
+
+    def synth(length = nil, type = nil, &block)
+      effect = Effect::Synth.new(length, type, &block)
+      @commands.concat(effect.commands)
       self
     end
 

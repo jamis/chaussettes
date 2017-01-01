@@ -17,14 +17,19 @@ module Chaussettes
       yield self if block_given?
     end
 
-    def command
+    def command(cmd = 'sox')
       raise 'a clip requires at least one input' if @inputs.empty?
-      raise 'a clip requires an output' if @output.nil?
-      Tool.new('sox').tap { |sox| _build_command(sox) }
+      Tool.new(cmd).tap { |sox| _build_command(sox) }
     end
 
     def run
       system(command.to_s)
+      self
+    end
+
+    def play
+      system(command('play').to_s)
+      self
     end
 
     def _build_command(sox)
@@ -44,7 +49,7 @@ module Chaussettes
     end
 
     def _append_output(sox)
-      sox.concat(@output.commands)
+      sox.concat(@output.commands) if @output
     end
 
     def _append_effects(sox)
@@ -76,6 +81,11 @@ module Chaussettes
 
     def multiply
       @combine = :multiply
+      self
+    end
+
+    def show_progress(flag)
+      @globals << (flag ? '--show-progress' : '--no-show-progress')
       self
     end
 
